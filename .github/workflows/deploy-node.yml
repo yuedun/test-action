@@ -93,11 +93,6 @@ jobs:
         # paths to exclude separated by `,`, ie: `/dist/, /node_modules/`
         EXCLUDE: "/node_modules/"
         # Script to run on host machine before rsync
-        SCRIPT_BEFORE: |
-          whoami
-          ls -al
+        SCRIPT_BEFORE: 
         # Script to run on host machine after rsync
-        SCRIPT_AFTER: |
-          whoami
-          ls -al
-          echo $RSYNC_STDOUT
+        SCRIPT_AFTER: 

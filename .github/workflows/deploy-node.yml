@@ -46,53 +46,50 @@ jobs:
       run: |
         npm install
         npm run build --if-present
-
-    - name: Upload artifact for deployment job
-      uses: actions/upload-artifact@v3
+        ls
+    - name: deploy
+      uses: D3rHase/rsync-deploy-action@v0.2
       with:
-        name: node-app
-        path: .
+        HOST: ${{secrets.REMOTE_HOST}}                             # Remote server address / ip - Required: true
+        PORT: ${{secrets.REMOTE_PORT}}                             # Remote server port -  Default: 22 - Required: false
+        USER: ${{secrets.REMOTE_USER}}                             # Remote server user - Required: true
+        PRIVATE_SSH_KEY: ${{secrets.SSH_PRIVATE_KEY}}       # Private ssh key registered on the remote server - Required: true
+        REPOSITORY_PATH: ${{ vars.SOURCE }}       # Repository path of the file-s you want to upload - Default: * - Required: true
+        SERVER_PATH: ${{ vars.TARGET }}               # Server destination / path, where the file-s will be uploaded to - Default: ~/ - Required: false
 
-  deploy:
-    permissions:
-      contents: none
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'Development'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-    - name: Download artifact from build job
-      uses: actions/download-artifact@v3
-      with:
-        name: node-app
-    
+  # deploy:
+  #   permissions:
+  #     contents: none
+  #   runs-on: ubuntu-latest
+  #   needs: build
+  #   steps:
     # Deploy
-    - name: ssh deploy
-      # You may pin to the exact commit or the version.
-      # uses: easingthemes/ssh-deploy@3884c8554ff45c0fd37d3f12a76288d06ce7a2ff
-      uses: easingthemes/ssh-deploy@v4.1.8
-      with:
-        # Private key part of an SSH key pair
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        # Remote host
-        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-        # Remote user
-        REMOTE_USER: ${{ secrets.REMOTE_USER }}
-        # Remote port
-        REMOTE_PORT: # optional, default is 22
-        # Source directory, path relative to `$GITHUB_WORKSPACE` root, eg: `dist/`
-        SOURCE: "public/"
-        # Target directory
-        TARGET: ${{ secrets.TARGET }}
-        # Arguments to pass to rsync
-        ARGS: # optional, default is -rlgoDzvc -i
-        # An array of ssh arguments, they must be prefixed with -o and separated by a comma, for example: -o SomeArgument=no, -o SomeOtherArgument=5 
-        SSH_CMD_ARGS: # optional, default is -o StrictHostKeyChecking=no
-        # paths to exclude separated by `,`, ie: `/dist/, /node_modules/`
-        EXCLUDE: "/node_modules/"
-        # Script to run on host machine before rsync
-        SCRIPT_BEFORE: 
-        # Script to run on host machine after rsync
-        SCRIPT_AFTER: 
+    # - name: Prepare SSH to work with the remote server
+    #   run: |
+    #     cd ~ && mkdir .ssh &&
+    #     touch ~/.ssh/known_hosts &&
+    #     echo "${{ secrets.HOST_KEY }}" > ~/.ssh/known_hosts
+    # - name: ssh deploy
+    #   uses: AEnterprise/rsync-deploy@v1.0
+    #   env:
+    #     DEPLOY_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+    #     ARGS: "-e -c -r --delete"
+    #     SERVER_PORT: 22
+    #     FOLDER: "./public"
+    #     SERVER_IP: ${{ secrets.REMOTE_HOST }}
+    #     USERNAME: ${{ secrets.REMOTE_USER }}
+    #     SERVER_DESTINATION: "www/test-deploy"
+    # - name: SSH Server Deploy
+    #   uses: kostya-ten/ssh-server-deploy@v4
+    #   with:
+    #     host: ${{ secrets.REMOTE_HOST }}
+    #     port: ${{ secrets.REMOTE_PORT }}
+    #     username: ${{ secrets.REMOTE_USER }}
+    #     password: ${{ secrets.REMOTE_PASSWORD }}
+    #     scp_source: ${{ vars.SOURCE }}
+    #     scp_target: ${{ vars.TARGET }}
+    #     before_script: |
+    #       ls
+    #       df -h
+    #     after_script: |
+    #       whoami

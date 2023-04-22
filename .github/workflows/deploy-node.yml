@@ -17,6 +17,8 @@
 # For more information on the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # For more samples to get started with GitHub Action workflows to deploy to Azure: https://github.com/Azure/actions-workflow-samples
 
+name: Deploying
+
 on:
   push:
     branches: [ "main" ]
@@ -83,7 +85,7 @@ jobs:
         # Source directory, path relative to `$GITHUB_WORKSPACE` root, eg: `dist/`
         SOURCE: "public/"
         # Target directory
-        TARGET: "public/"
+        TARGET: ${{ secrets.TARGET }}
         # Arguments to pass to rsync
         ARGS: # optional, default is -rlgoDzvc -i
         # An array of ssh arguments, they must be prefixed with -o and separated by a comma, for example: -o SomeArgument=no, -o SomeOtherArgument=5 

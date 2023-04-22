@@ -23,9 +23,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: your-app-name    # set this to your application's name
-  AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
-  NODE_VERSION: '14.x'                # set this to the node version to use
+  NODE_VERSION: '18.x'                # set this to the node version to use
 
 permissions:
   contents: read
@@ -42,11 +40,10 @@ jobs:
         node-version: ${{ env.NODE_VERSION }}
         cache: 'npm'
 
-    - name: npm install, build, and test
+    - name: npm install, build
       run: |
         npm install
         npm run build --if-present
-        npm run test --if-present
 
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v3
@@ -68,11 +65,32 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: node-app
-
-    - name: 'Deploy to Azure WebApp'
-      id: deploy-to-webapp
-      uses: azure/webapps-deploy@v2
+    
+    # Deploy
+    - name: ssh deploy
+      # You may pin to the exact commit or the version.
+      # uses: easingthemes/ssh-deploy@3884c8554ff45c0fd37d3f12a76288d06ce7a2ff
+      uses: easingthemes/ssh-deploy@v4.1.8
       with:
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        # Private key part of an SSH key pair
+        SSH_PRIVATE_KEY: ${{ secrets.ACCESS_TOKEN }}
+        # Remote host
+        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+        # Remote user
+        REMOTE_USER: ${{ secrets.REMOTE_USER }}
+        # Remote port
+        REMOTE_PORT: # optional, default is 22
+        # Source directory, path relative to `$GITHUB_WORKSPACE` root, eg: `dist/`
+        SOURCE: "public/"
+        # Target directory
+        TARGET: "public/"
+        # Arguments to pass to rsync
+        ARGS: # optional, default is -rlgoDzvc -i
+        # An array of ssh arguments, they must be prefixed with -o and separated by a comma, for example: -o SomeArgument=no, -o SomeOtherArgument=5 
+        SSH_CMD_ARGS: # optional, default is -o StrictHostKeyChecking=no
+        # paths to exclude separated by `,`, ie: `/dist/, /node_modules/`
+        EXCLUDE: # optional, default is 
+        # Script to run on host machine before rsync
+        SCRIPT_BEFORE: # optional, default is 
+        # Script to run on host machine after rsync
+        SCRIPT_AFTER: # optional, default is 

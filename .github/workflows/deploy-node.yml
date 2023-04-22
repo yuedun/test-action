@@ -73,7 +73,7 @@ jobs:
       uses: easingthemes/ssh-deploy@v4.1.8
       with:
         # Private key part of an SSH key pair
-        SSH_PRIVATE_KEY: ${{ secrets.ACCESS_TOKEN }}
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         # Remote host
         REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
         # Remote user
@@ -89,8 +89,13 @@ jobs:
         # An array of ssh arguments, they must be prefixed with -o and separated by a comma, for example: -o SomeArgument=no, -o SomeOtherArgument=5 
         SSH_CMD_ARGS: # optional, default is -o StrictHostKeyChecking=no
         # paths to exclude separated by `,`, ie: `/dist/, /node_modules/`
-        EXCLUDE: # optional, default is 
+        EXCLUDE: "/node_modules/"
         # Script to run on host machine before rsync
-        SCRIPT_BEFORE: # optional, default is 
+        SCRIPT_BEFORE: |
+          whoami
+          ls -al
         # Script to run on host machine after rsync
-        SCRIPT_AFTER: # optional, default is 
+        SCRIPT_AFTER: |
+          whoami
+          ls -al
+          echo $RSYNC_STDOUT

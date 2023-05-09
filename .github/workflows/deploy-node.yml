@@ -41,5 +41,6 @@ jobs:
         TARGET: ${{ vars.TARGET }}
         EXCLUDE: ".git"
         SCRIPT_AFTER: |
+          cd ${{ vars.TARGET }}
           ls
-          pm2 startOrReload ${{ vars.TARGET }}/index.js --name test-deploy
+          sh ./run.sh

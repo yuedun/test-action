@@ -40,4 +40,6 @@ jobs:
         # SOURCE: ${{ vars.SOURCE }}
         TARGET: ${{ vars.TARGET }}
         EXCLUDE: ".git"
-        SCRIPT_AFTER: pm2 startOrReload index.js --name test-deploy
+        SCRIPT_AFTER: |
+          cd ${{ vars.TARGET }}
+          pm2 startOrReload index.js --name test-deploy

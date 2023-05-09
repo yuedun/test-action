@@ -44,3 +44,4 @@ jobs:
           cd ${{ vars.TARGET }}
           ls
           pm2 ls
+          pm2 start index.js --name test-deploy

@@ -30,13 +30,13 @@ jobs:
         npm run build --if-present
         ls
 
-    - name: Deploy to Server
-      uses: hengkx/ssh-deploy@v1.0.1
-      with:
-        USERNAME: ${{ secrets.REMOTE_USER }}
-        PASSWORD: ${{ secrets.REMOTE_PASSWORD }}
-        HOST: ${{ secrets.REMOTE_HOST }}
+    - name: Deploy
+      uses: easingthemes/ssh-deploy@v2.0.7
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        ARGS: "-avz --delete"
         SOURCE: ${{ vars.SOURCE }}
+        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+        REMOTE_USER: ${{ secrets.REMOTE_USER }}
         TARGET: ${{ vars.TARGET }}
-        AFTER_COMMAND: 'node index.js'
   

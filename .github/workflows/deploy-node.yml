@@ -43,4 +43,4 @@ jobs:
         SCRIPT_AFTER: |
           cd ${{ vars.TARGET }}
           ls
-          sh ./run.sh
+          pm2 ls

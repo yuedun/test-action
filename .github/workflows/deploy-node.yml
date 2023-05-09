@@ -40,3 +40,4 @@ jobs:
         REMOTE_USER: ${{ secrets.REMOTE_USER }}
         TARGET: ${{ vars.TARGET }}
         # EXCLUDE: "/dist/, /node_modules/"
+        SCRIPT_BEFORE: which rsync

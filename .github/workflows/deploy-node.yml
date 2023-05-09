@@ -29,14 +29,14 @@ jobs:
         npm install
         npm run build --if-present
         ls
-
-    - name: Deploy
-      uses: easingthemes/ssh-deploy@v2.0.7
+    
+    - name: Deploy to Server
+      uses: easingthemes/ssh-deploy@main
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        ARGS: "-avz --delete"
+        ARGS: "-rlgoDzvc -i --delete"
         SOURCE: ${{ vars.SOURCE }}
         REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
         REMOTE_USER: ${{ secrets.REMOTE_USER }}
         TARGET: ${{ vars.TARGET }}
-  
+        # EXCLUDE: "/dist/, /node_modules/"

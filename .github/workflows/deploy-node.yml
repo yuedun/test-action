@@ -35,9 +35,9 @@ jobs:
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         ARGS: "-rlgoDzvc -i --delete"
-        SOURCE: ${{ vars.SOURCE }}
         REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
         REMOTE_USER: ${{ secrets.REMOTE_USER }}
+        # SOURCE: ${{ vars.SOURCE }}
         TARGET: ${{ vars.TARGET }}
         # EXCLUDE: "/dist/, /node_modules/"
-        SCRIPT_AFTER: which rsync
+        SCRIPT_AFTER: node index.js

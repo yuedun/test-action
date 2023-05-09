@@ -29,25 +29,6 @@ jobs:
         npm install
         npm run build --if-present
         ls
-    # - name: deploy
-    #   uses: D3rHase/rsync-deploy-action@v0.2
-    #   with:
-    #     HOST: ${{secrets.REMOTE_HOST}}                             # Remote server address / ip - Required: true
-    #     PORT: ${{secrets.REMOTE_PORT}}                             # Remote server port -  Default: 22 - Required: false
-    #     USER: ${{secrets.REMOTE_USER}}                             # Remote server user - Required: true
-    #     PRIVATE_SSH_KEY: ${{secrets.SSH_PRIVATE_KEY}}       # Private ssh key registered on the remote server - Required: true
-    #     REPOSITORY_PATH: ${{ vars.SOURCE }}       # Repository path of the file-s you want to upload - Default: * - Required: true
-    #     SERVER_PATH: ${{ vars.TARGET }}               # Server destination / path, where the file-s will be uploaded to - Default: ~/ - Required: false
-    
-    # - name: rsync deployments
-    #   uses: burnett01/rsync-deployments@5.2.1
-    #   with:
-    #     switches: -avzr --delete
-    #     path: ${{ vars.SOURCE }}
-    #     remote_path: ${{ vars.TARGET }}
-    #     remote_host: ${{secrets.REMOTE_HOST}}
-    #     remote_user: ${{secrets.REMOTE_USER}}
-    #     remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
 
     - name: Deploy to Server
       uses: hengkx/ssh-deploy@v1.0.1
@@ -57,5 +38,5 @@ jobs:
         HOST: ${{ secrets.REMOTE_HOST }}
         SOURCE: ${{ vars.SOURCE }}
         TARGET: ${{ vars.TARGET }}
-        AFTER_COMMAND: 'npm install --production && npm run start'
+        AFTER_COMMAND: 'node index.js'
   

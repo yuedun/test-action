@@ -11,7 +11,7 @@ http.createServer(function (request, response) {
     //告诉浏览器将以text/plain去解析hello server这段数据
     response.writeHead(200, { 'Content-type': 'text/html;charset=utf-8' });
     //给浏览器输出内容
-    response.end("<h1>hello server</h1>");
+    response.end("<h1>hello server aaa</h1>");
 }).listen(8888);
 
 
